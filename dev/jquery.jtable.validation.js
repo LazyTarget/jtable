@@ -71,7 +71,6 @@
 					
 				if (isRequired && !value) {
 					self._showError('Field "' + fieldName + '" is required');
-                    self._setEnabledOfDialogButton($saveButton, true, self.options.messages.save);
                     return false;
 				}
 			}
