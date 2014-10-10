@@ -70,7 +70,7 @@
 					isRequired = field.required(data);
 					
 				if (isRequired && !value) {
-					self._showError('Field "' + field.name + '" is required');
+					self._showError('Field "' + fieldName + '" is required');
                     self._setEnabledOfDialogButton($saveButton, true, self.options.messages.save);
                     return false;
 				}
