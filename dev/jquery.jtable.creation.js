@@ -215,7 +215,13 @@
 
             }
         },
-
+		
+		showNewRowAnimation: function ($tableRow) {
+            if ($tableRow)
+                this._showNewRowAnimation($tableRow);
+        },
+		
+		
         /************************************************************************
         * PRIVATE METHODS                                                       *
         *************************************************************************/

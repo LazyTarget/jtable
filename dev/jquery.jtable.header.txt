@@ -1,6 +1,6 @@
 ﻿/* 
 
-jTable 2.4.0
+jTable 2.4.0 - forked by Peter Åslund 2014-10-08 (https://github.com/LazyTarget/jtable)
 http://www.jtable.org
 
 ---------------------------------------------------------------------------
