@@ -93,7 +93,9 @@
                     e.preventDefault();
                     self._showAddRecordForm();
                 });
-            } else {
+            } else if (self.options.addRecordButton === false) {
+				//If user doesn't want a button, do nothing...
+			} else {
                 //If user did not supplied a button, create a 'add record button' toolbar item.
                 self._addToolBarItem({
                     icon: true,
@@ -231,22 +233,33 @@
 
                 var fieldName = self._fieldList[i];
                 var field = self.options.fields[fieldName];
-
+				
+				var funcParams = {
+					fieldName: fieldName,
+					formType: 'create',
+					form: $addRecordForm
+				};
+				
+				if (typeof(field.create) == "function")
+					field._create = field.create(funcParams);
+				else
+					field._create = field.create;
+				
+				//Do not create input for fields that are not creatable
+                if (field.create == false) {
+                    continue;
+                }
+				
                 //Do not create input for fields that is key and not specially marked as creatable
                 if (field.key == true && field.create != true) {
                     continue;
                 }
-
-                //Do not create input for fields that are not creatable
-                if (field.create == false) {
-                    continue;
-                }
-
+				
                 if (field.type == 'hidden') {
                     $addRecordForm.append(self._createInputForHidden(fieldName, field.defaultValue));
                     continue;
                 }
-
+				
                 //Create a container div for this input field and add to form
                 var $fieldContainer = $('<div />')
                     .addClass('jtable-input-field-container')
@@ -256,12 +269,8 @@
                 $fieldContainer.append(self._createInputLabelForRecordField(fieldName));
 
                 //Create input element
-                $fieldContainer.append(
-                    self._createInputForRecordField({
-                        fieldName: fieldName,
-                        formType: 'create',
-                        form: $addRecordForm
-                    }));
+				var element = self._createInputForRecordField(funcParams);
+                $fieldContainer.append(element);
             }
 
             self._makeCascadeDropDowns($addRecordForm, undefined, 'create');
