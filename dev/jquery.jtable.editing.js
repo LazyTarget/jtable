@@ -265,9 +265,22 @@
                 var fieldName = self._fieldList[i];
                 var field = self.options.fields[fieldName];
                 var fieldValue = record[fieldName];
-
+				var currentValue = self._getValueForRecordField(record, fieldName);
+				
+				var funcParams = {
+					fieldName: fieldName,
+					value: currentValue,
+					record: record,
+					formType: 'edit',
+					form: $editForm
+				};
+				if (typeof(field.edit) == "function")
+					field._edit = field.edit(funcParams);
+				else
+					field._edit = field.edit;
+				
                 if (field.key == true) {
-                    if (field.edit != true) {
+                    if (field._edit != true) {
                         //Create hidden field for key
                         $editForm.append(self._createInputForHidden(fieldName, fieldValue));
                         continue;
@@ -276,9 +289,9 @@
                         $editForm.append(self._createInputForHidden('jtRecordKey', fieldValue));
                     }
                 }
-
+				
                 //Do not create element for non-editable fields
-                if (field.edit == false) {
+                if (field._edit == false) {
                     continue;
                 }
 
@@ -295,15 +308,8 @@
                 $fieldContainer.append(self._createInputLabelForRecordField(fieldName));
 
                 //Create input element with it's current value
-                var currentValue = self._getValueForRecordField(record, fieldName);
-                $fieldContainer.append(
-                    self._createInputForRecordField({
-                        fieldName: fieldName,
-                        value: currentValue,
-                        record: record,
-                        formType: 'edit',
-                        form: $editForm
-                    }));
+                var element = self._createInputForRecordField(funcParams);
+                $fieldContainer.append(element);
             }
             
             self._makeCascadeDropDowns($editForm, record, 'edit');
@@ -414,7 +420,7 @@
             var record = $tableRow.data('record');
             var $columns = $tableRow.find('td');
             for (var i = 0; i < this._columnList.length; i++) {
-                var displayItem = this._getDisplayTextForRecordField(record, this._columnList[i]);
+				var displayItem = this._getDisplayTextForRecordField(record, this._columnList[i]);
                 if ((displayItem != "") && (displayItem == 0)) displayItem = "0";
                 $columns.eq(this._firstDataColumnOffset + i).html(displayItem || '');
             }
