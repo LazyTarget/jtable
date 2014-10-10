@@ -414,7 +414,7 @@
                 var field = this.options.fields[fieldName];
 
                 //Do not update non-editable fields
-                if (field.edit == false) {
+                if (field.edit == false || field._edit == false) {
                     continue;
                 }
 
