@@ -272,7 +272,8 @@
 					value: currentValue,
 					record: record,
 					formType: 'edit',
-					form: $editForm
+					form: $editForm,
+					field: field
 				};
 				if (typeof(field.edit) == "function")
 					field._edit = field.edit(funcParams);
@@ -291,12 +292,12 @@
                 }
 				
                 //Do not create element for non-editable fields
-                if (field._edit == false) {
-                    continue;
-                }
+                //if (field._edit == false) {
+                //    continue;
+                //}
 
                 //Hidden field
-                if (field.type == 'hidden') {
+                if (field.type == 'hidden' || field._edit === false) {
                     $editForm.append(self._createInputForHidden(fieldName, fieldValue));
                     continue;
                 }

@@ -367,6 +367,12 @@
             this._reloadTable(completeCallback);
         },
 
+        /* Gets all jQuery table rows
+        *************************************************************************/
+        getRows: function () {
+            return this._$tableRows;
+        },
+
         /* Gets a jQuery row object according to given record key
         *************************************************************************/
         getRowByKey: function (key) {

@@ -243,25 +243,25 @@
 				var funcParams = {
 					fieldName: fieldName,
 					formType: 'create',
-					form: $addRecordForm
-				};
-				
+					form: $addRecordForm,
+					field: field
+				};				
 				if (typeof(field.create) == "function")
 					field._create = field.create(funcParams);
 				else
 					field._create = field.create;
 				
 				//Do not create input for fields that are not creatable
-                if (field._create == false) {
-                    continue;
-                }
+                //if (field._create == false) {
+                //    continue;
+                //}
 				
                 //Do not create input for fields that is key and not specially marked as creatable
                 if (field.key == true && field._create != true) {
                     continue;
                 }
 				
-                if (field.type == 'hidden') {
+                if (field.type == 'hidden' || field._create === false) {
                     $addRecordForm.append(self._createInputForHidden(fieldName, field.defaultValue));
                     continue;
                 }

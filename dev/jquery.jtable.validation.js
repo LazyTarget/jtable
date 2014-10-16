@@ -42,7 +42,7 @@
 			var $form = this._$addRecordDiv.find('form');
 			var queryString = $form.serialize();
 			var data = this._convertQueryStringToObject(queryString);
-			var res = this._validate(data);
+			var res = this._validate(data, 'create');
 			if (res !== false)
 				base._onSaveClickedOnCreateForm.apply(this, arguments);
 		},
@@ -51,7 +51,7 @@
 			var $form = this._$editDiv.find('form');
 			var queryString = $form.serialize();
 			var data = this._convertQueryStringToObject(queryString);
-			var res = this._validate(data);
+			var res = this._validate(data, 'edit');
 			if (res !== false)
 				base._onSaveClickedOnEditForm.apply(this, arguments);
 		},
@@ -59,16 +59,28 @@
         /************************************************************************
         * PRIVATE METHODS                                                       *
         *************************************************************************/
-		_validate: function (data) {
+		_validate: function (data, formType) {
 			var self = this;
 			for (var fieldName in self.options.fields) {
 				var field = self.options.fields[fieldName];
 				var value = data[fieldName];
 				
+				if (field.key === true)
+					continue;
+				if (formType === 'create') {
+					if (field.create === false || 
+						field._create === false)
+						continue;
+				} else if (formType === 'edit') {
+					if (field.edit === false || 
+						field._edit === false)
+						continue;
+				}
+				
 				var isRequired = field.required;
 				if (typeof(field.required) == "function")
 					isRequired = field.required(data);
-					
+				
 				if (isRequired && !value) {
 					self._showError('Field "' + fieldName + '" is required');
                     return false;
